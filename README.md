@@ -3,7 +3,7 @@ Welcome to the GIT-page for the CosmicLab project. Here we have some example cod
 
 
 # Scripts 
-contains example python scripts for analsing the timestamped data from the Arduino. They all assume that the format is as in the Arduino-examples.
+contains example python scripts for analysing the timestamped data from the Arduino. They all assume that the format is as in the Arduino-examples.
 
 # Arduino
 Contains example arduino programs to run an aquisition of time stamped data. 
