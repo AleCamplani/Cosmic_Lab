@@ -1,0 +1,24 @@
+=~=~=~=~=~=~=~=~=~=~=~= PuTTY log 2021.10.19 12:51:26 =~=~=~=~=~=~=~=~=~=~=~=
+Waiting for GPS fix
+Starting Logging Session
+Time: 10:53:28.000
+Date: 19/10/2021
+
+Change!
+Time: 10:54:11.000
+Date: 19/10/2021
+
+Change!
+Time: 10:54:12.202
+Date: 19/10/2021
+
+Change!
+Time: 10:54:16.000
+Date: 19/10/2021
+
+Change!
+Time: 10:54:18.202
+Date: 19/10/2021
+Stopping logging session
+Time: 10:54:23.000
+Date: 19/10/2021
