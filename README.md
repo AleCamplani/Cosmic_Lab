@@ -2,8 +2,8 @@
 Welcome to the GIT-page for the CosmicLab project. Here we have some example code to get you started.
 
 
-# Scripts 
-contains example python scripts for analysing the timestamped data from the Arduino. They all assume that the format is as in the Arduino-examples.
+# Python_Scripts 
+contains example python scripts for logging data from the Arduino to the PC using pyserial. 
 
-# Arduino
+# Arduino_Sketches
 Contains example arduino programs to run an aquisition of time stamped data. 
