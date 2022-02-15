@@ -83,7 +83,7 @@ New Method (4/2-22)
 """
 
 N=100
-
+"""
 #Two-detector case(1+2):
 Delta_L=20
 Delta_W=0
@@ -110,6 +110,175 @@ W_b=40.5
 h=40 #all in cm
 
 
+#Three-dector case (5+1+2, computed for 5+2)
+
+Delta_L=(19-5)
+Delta_W=0
+
+L_t=50
+W_t=30
+
+L_b=100
+W_b=38
+
+h=14.5+9.5 #all in cm
+
+#One-dector case (5 computed for 5+5)
+
+Delta_L=0
+Delta_W=0
+
+L_t=50
+W_t=30
+
+L_b=50
+W_b=30
+
+h=0.0001 #all in cm
+"""
+
+#(computed for 5+1)
+
+Delta_L=(19)
+Delta_W=0
+
+L_t=50
+W_t=30
+
+L_b=101
+W_b=40
+
+h=14.5 #all in cm
+
+#(computed for 5+2)
+
+Delta_L=(19-5)
+Delta_W=0
+
+L_t=50
+W_t=30
+
+L_b=80
+W_b=38
+
+h=14.5+9.5 #all in cm
+
+#(computed for 5+3)
+
+Delta_L=(19-5+7)
+Delta_W=0
+
+L_t=50
+W_t=30
+
+L_b=101
+W_b=40
+
+h=14.5+9.5+30 #all in cm
+
+#(computed for 5+4)
+
+Delta_L=(19-5+7-4)
+Delta_W=0
+
+L_t=50
+W_t=30
+
+L_b=101
+W_b=40.5
+
+h=14.5+9.5+30+15.5 #all in cm
+
+#(computed for 1+4)
+
+Delta_L=(-5+7-4)
+Delta_W=0
+
+L_t=101
+W_t=40
+
+L_b=101
+W_b=40.5
+
+h=9.5+30+15.5 #all in cm
+
+#(computed for 1+3)
+
+Delta_L=(-5+7)
+Delta_W=0
+
+L_t=101
+W_t=40
+
+L_b=80
+W_b=40
+
+h=9.5+30 #all in cm
+
+#(computed for 1+2)
+
+Delta_L=(-5)
+Delta_W=0
+
+L_t=101
+W_t=40
+
+L_b=80
+W_b=38
+
+h=9.5 #all in cm
+
+#(computed for 2+3)
+
+Delta_L=(7)
+Delta_W=0
+
+L_t=80
+W_t=38
+
+L_b=100
+W_b=40
+
+h=30 #all in cm
+
+#(computed for 2+4)
+
+Delta_L=(7-4)
+Delta_W=0
+
+L_t=80
+W_t=38
+
+L_b=101
+W_b=40.5
+
+h=30+15.5 #all in cm
+
+#(computed for 3+4)
+
+Delta_L=(-4)
+Delta_W=0
+
+L_t=100
+W_t=40
+
+L_b=101
+W_b=40.5
+
+h=15.5 #all in cm
+
+#(computed for 1+2)
+
+Delta_L=(-5)
+Delta_W=0
+
+L_t=101
+W_t=40
+
+L_b=80
+W_b=38
+
+h=9.5 #all in cm
 
 dw_b=W_b/N
 dl_b=L_b/N
@@ -161,10 +330,10 @@ for i,w in enumerate(w_list): #double integral
         
 print(np.max(R_matrix/(flux*dw_b*dl_b)))
 print(R)
-
+print(R/(flux*L_b*W_b))
 
 plt.figure()
-plt.imshow(R_matrix) # sanity-check
+plt.imshow(R_matrix,interpolation='none',extent=[0,L_b,W_b,0]) # sanity-check
 
 
 
