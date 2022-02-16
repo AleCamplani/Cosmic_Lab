@@ -280,6 +280,13 @@ W_b=38
 
 h=9.5 #all in cm
 
+L=
+
+
+
+
+
+
 dw_b=W_b/N
 dl_b=L_b/N
 
@@ -291,7 +298,7 @@ def Omega(theta,phi,N):
     
     d_theta=theta/N
     
-    theta_list=np.linspace(0,theta,N)
+    theta_list=np.linspace(np.pi*0.5-theta*0.5,np.pi*0.5+theta*0.5,N)
     
     Integrand=phi*d_theta*np.sin(theta_list)
     
