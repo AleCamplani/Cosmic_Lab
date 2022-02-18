@@ -7,11 +7,11 @@ Open specified file and outputs clean data another file
 import numpy as np
 
 
-StartFile='..\..\Datafiles\CosmicLabData\CopenhagenCoincidence090222.txt'
+StartFile='..\..\Datafiles\CosmicLabData\prague-2022-02-09.txt'
 
-EndFile='..\..\Datafiles\CosmicLabData\CopenhagenCoincidence090222Clean.txt'
+EndFile  ='..\..\Datafiles\CosmicLabData\prague-2022-02-09Clean.txt'
 
-Keyword="Coincidence"
+Keyword="Time"
 
 Data=np.genfromtxt(StartFile,delimiter='\n',dtype=str)
 
@@ -25,7 +25,8 @@ File = open(EndFile,"a") #append only
 for d in Data:
     if d[0:len(Keyword)]==Keyword:
         CleanData.append(d)
-        File.write(d+"\n") #Put into the datalog
+        #File.write(d+"\n") #Put into the datalog
+        File.write("Coincidence;"+d[len(Keyword)+1:21]+":000:;"+"\n") #Put into the datalog
     else:
         removedPoints+=1
         print(d)

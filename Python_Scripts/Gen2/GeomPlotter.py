@@ -12,7 +12,7 @@ R=100
 N=100
 Fact=1
 
-ax.view_init(elev=80,azim=0)
+ax.view_init(elev=60,azim=40)
 ax.set_box_aspect((1,1,1))
 ax.set_axis_off()
 
@@ -20,7 +20,7 @@ ax.set_xlim3d(-Fact*R,Fact*R)
 ax.set_ylim3d(-Fact*R,Fact*R)
 ax.set_zlim3d(-Fact*R,Fact*R)
 
-def PlotSphereSurf(theta,phi,Origin,roty=0,rotx=0,initRot=False,a=1,R=1,c='b'):
+def PlotSphereSurf(theta,phi,Origin,roty=0,rotx=0,ax=ax,initRot=False,a=1,R=1,c='b'):
 
     M0=np.array([1,0,0])    
     M=M0.copy()
@@ -45,22 +45,25 @@ def PlotSphereSurf(theta,phi,Origin,roty=0,rotx=0,initRot=False,a=1,R=1,c='b'):
         y=y0
         z=z0
         M=M0
-    #Do x rotation
-    x0=x.copy()
-    y0=y.copy()
-    z0=z.copy()
-    M0=M.copy()
-    
-    x=x0
-    y=y0*np.cos(rotx)-z0*np.sin(rotx)
-    z=z0*np.cos(rotx)+y0*np.sin(rotx)
-    
-    M=np.zeros(3)
-    M[0]=M0[0]
-    M[1]=M0[1]*np.cos(rotx)-M0[2]*np.sin(rotx)
-    M[2]=M0[2]*np.cos(rotx)+M0[1]*np.sin(rotx)
-    
-    MNorm=-np.cross(M, [1,0,0]) #Vector to do second rotation around
+    if rotx!=0:
+        #Do x rotation
+        x0=x.copy()
+        y0=y.copy()
+        z0=z.copy()
+        M0=M.copy()
+        
+        x=x0
+        y=y0*np.cos(rotx)-z0*np.sin(rotx)
+        z=z0*np.cos(rotx)+y0*np.sin(rotx)
+        
+        M=np.zeros(3)
+        M[0]=M0[0]
+        M[1]=M0[1]*np.cos(rotx)-M0[2]*np.sin(rotx)
+        M[2]=M0[2]*np.cos(rotx)+M0[1]*np.sin(rotx)
+        
+        MNorm=-np.cross(M, [1,0,0]) #Vector to do second rotation around
+    else:
+        MNorm=np.array([0,1,0])
     
     #Do y rotation
     x0=x.copy()
@@ -84,7 +87,7 @@ def PlotSphereSurf(theta,phi,Origin,roty=0,rotx=0,initRot=False,a=1,R=1,c='b'):
             y[i,j]=V[1]
             z[i,j]=V[2]
             
-            
+                
     ax.plot_surface(x,y,z,color=c,alpha=a)
     
     return M,MNorm
@@ -101,7 +104,7 @@ def PlotLine(Angle1,Angle2,Origin=[0,0,0]):
     ax.plot(x,y,z,color='r')
     
 
-def PlotLineVect(Vect,Origin=[0,0,0],scale=1,c='r'):
+def PlotLineVect(Vect,Origin=[0,0,0],scale=1,c='r',ax=ax):
 
     Vect_Norm=np.array(Vect)/np.sqrt(np.dot(np.array(Vect),np.array(Vect)))
 
@@ -199,7 +202,7 @@ D_W=0
 D_L=19-np.abs((L_t-L_b))/2
 
 
-l=19
+l=15
 w=10
 
 Origin=np.array([w,l,0])
@@ -266,10 +269,10 @@ print(psi+ksi+psi2+ksi2)
 
 
 #Plot Bottom Detector:
-PlotPLane2([0,W_b],[0,L_b],0)
+PlotPLane2([0,W_b],[0,L_b],0,a=0.8)
 
 #Plot Top Detector:
-PlotPLane2([0+(W_b-W_t)/2,W_t+(W_b-W_t)/2],[0+(L_b-L_t)/2+D_L,L_t+(L_b-L_t)/2+D_L],h,c='orange')
+PlotPLane2([0+(W_b-W_t)/2,W_t+(W_b-W_t)/2],[0+(L_b-L_t)/2+D_L,L_t+(L_b-L_t)/2+D_L],h,c='orange',a=0.8)
 
  
 LineLen=120
@@ -325,7 +328,7 @@ M1,M2=PlotSphereSurf([np.pi/2-theta/2,np.pi/2+theta/2],[-phi/2,phi/2],Origin,rot
 #PlotLineVect(MNorm,Origin,scale=LineLen,c='magenta')        
 
 #Colors=['r','g','b','orange']
-Colors=['r','r','r','r']
+Colors=['cyan','cyan','r','r']
 
 for v,c in zip(Vectors,Colors):
     PlotLineVect(v,Origin,scale=LineLen,c=c)
@@ -347,6 +350,9 @@ for v,c in zip(Vectors,Colors):
 #PlotLineVect(MidVector,Origin,scale=LineLen,c='k')
 #PlotLineVect(A,Origin,scale=LineLen,c='k')
 #PlotLineVect(C,Origin,scale=LineLen,c='k')
+
+
+plt.savefig("GeomExample1.png", dpi=600)
 
 """
 #Angle1=phi/2
@@ -386,4 +392,59 @@ Corner=ROTY(Corner,roty)
 V=Corner-Origin
 PlotLineVect(V,Origin,scale=120)
 """
+fig2 = plt.figure()
+
+ax2 = fig2.add_subplot(projection='3d')
+
+R=1
+N=100
+Fact=0.8
+
+ax2.view_init(elev=30,azim=50)
+ax2.set_box_aspect((1,1,1))
+ax2.set_axis_off()
+
+ax2.set_xlim3d(-Fact*R,Fact*R)
+ax2.set_ylim3d(-Fact*R,Fact*R)
+ax2.set_zlim3d(-Fact*R,Fact*R)
+
+theta=1
+phi=2
+
+Origin=[0,0,0]
+
+M,M2=PlotSphereSurf([np.pi/2-theta/2,np.pi/2+theta/2],[-phi/2,phi/2],[0,0,0],rotx=0,roty=0,a=0.4,R=1,initRot=False,ax=ax2)
+
+S=1.2
+
+Angle1=-phi/2
+Angle2=np.pi/2
+Corner=np.array([R*np.cos(Angle1)*np.sin(Angle2)+Origin[0],R*np.sin(Angle1)*np.sin(Angle2)+Origin[1],R*np.cos(Angle2)+Origin[2]])
+V=Corner-Origin
+PlotLineVect(V,Origin,scale=S,ax=ax2,c='k')
+
+Angle1=phi/2
+Angle2=np.pi/2
+Corner=np.array([R*np.cos(Angle1)*np.sin(Angle2)+Origin[0],R*np.sin(Angle1)*np.sin(Angle2)+Origin[1],R*np.cos(Angle2)+Origin[2]])
+V=Corner-Origin
+PlotLineVect(V,Origin,scale=S,ax=ax2,c='k')
+
+Angle1=0
+Angle2=np.pi/2+theta/2
+Corner=np.array([R*np.cos(Angle1)*np.sin(Angle2)+Origin[0],R*np.sin(Angle1)*np.sin(Angle2)+Origin[1],R*np.cos(Angle2)+Origin[2]])
+V=Corner-Origin
+PlotLineVect(V,Origin,scale=S,ax=ax2,c='r')
+
+Angle1=0
+Angle2=np.pi/2-theta/2
+Corner=np.array([R*np.cos(Angle1)*np.sin(Angle2)+Origin[0],R*np.sin(Angle1)*np.sin(Angle2)+Origin[1],R*np.cos(Angle2)+Origin[2]])
+V=Corner-Origin
+PlotLineVect(V,Origin,scale=S,ax=ax2,c='r')
+
+width=0.02
+
+M,M2=PlotSphereSurf([np.pi/2-width,np.pi/2+width],[-phi/2,phi/2],[0,0,0],rotx=0,roty=0,a=1,R=S,initRot=False,ax=ax2,c='k')
+M,M2=PlotSphereSurf([np.pi/2-theta/2,np.pi/2+theta/2],[-width,width],[0,0,0],rotx=0,roty=0,a=1,R=S,initRot=False,ax=ax2,c='r')
+
+plt.savefig("Angles.png", dpi=600)
 

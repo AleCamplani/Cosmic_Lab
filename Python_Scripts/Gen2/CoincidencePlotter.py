@@ -19,14 +19,16 @@ plt.close("all")
 Set parameters:
 """
 #Filelocation='..\..\Datafiles\CosmicLabData\CopenhagenCoincidence090222Clean.txt'
-Filelocation='..\..\Datafiles\Gen3Files\Gen3Coincidence12Run1.txt'
+#Filelocation='..\..\Datafiles\CosmicLabData\8-00-16_2022-02-09.txt'
+Filelocation='..\..\Datafiles\CosmicLabData\prague-2022-02-09Clean.txt'
+#Filelocation='..\..\Datafiles\Gen3Files\Gen3Coincidence12Run1.txt'
 
 
 #For the histogram:
 emin=0-0.5
-emax=30+0.5
+emax=80+0.5
 Nbins=int(emax-emin)
-timeBin=1 #in seconds
+timeBin=10 #in seconds
 
 #For running average:
 Running_Average_time=5 #in seconds
@@ -55,7 +57,7 @@ times=np.zeros(len(x))
 for i in range(len(times)):
     
     times[i]=CL.readTime(x[i],unit="Seconds")
-times=times-np.min(times)#subtracj starting time
+times=times-times[0]#subtracj starting time
 
 """
 Running average:
