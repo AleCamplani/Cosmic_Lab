@@ -1,0 +1,21 @@
+=~=~=~=~=~=~=~=~=~=~=~= PuTTY log 2021.11.03 17:08:30 =~=~=~=~=~=~=~=~=~=~=~=
+Waiting for GPS Fix
+GPS Fix obtained at;Time:16:08:29.003:112;Date:0/0/200
+Coincidence;Time:16:08:34.962:348;Date:3/11/2021
+Coincidence;Time:16:08:38.242:704;Date:3/11/2021
+Coincidence;Time:16:08:45.816:584;Date:3/11/2021
+Coincidence;Time:16:08:48.935:724;Date:3/11/2021
+Coincidence;Time:16:08:53.037:960;Date:3/11/2021
+Coincidence;Time:16:09:03.603:092;Date:3/11/2021
+Coincidence;Time:16:09:03.639:088;Date:3/11/2021
+Coincidence;Time:16:09:04.210:148;Date:3/11/2021
+Coincidence;Time:16:09:08.036:964;Date:3/11/2021
+Coincidence;Time:16:09:08.543:144;Date:3/11/2021
+Coincidence;Time:16:09:11.611:924;Date:3/11/2021
+Coincidence;Time:16:09:17.429:024;Date:3/11/2021
+Coincidence;Time:16:09:19.206:896;Date:3/11/2021
+Coincidence;Time:16:09:23.235:532;Date:3/11/2021
+Coincidence;Time:16:09:32.204:008;Date:3/11/2021
+Coincidence;Time:16:09:34.747:588;Date:3/11/2021
+Coincidence;Time:16:09:39.332:284;Date:3/11/2021
+Stopping logging session;Time:16:09:43.636:780;Date:3/11/2021

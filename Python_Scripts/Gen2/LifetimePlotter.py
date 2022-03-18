@@ -28,8 +28,8 @@ plt.close('all')
 #filenames=['..\..\Datafiles\CosmicLabData\Gen3LifetimeRun16.txt','..\..\Datafiles\Gen3Files\Gen3LifetimeRun10.txt']
 #filenames=['..\..\Datafiles\CosmicLabData\Gen3LifetimeRun17.txt']
 #filenames=['..\..\Datafiles\CosmicLabData\Gen3LifetimeRun19.txt','..\..\Datafiles\CosmicLabData\Gen3LifetimeRun18.txt','..\..\Datafiles\CosmicLabData\Gen3LifetimeRun17.txt']
-#filenames=['..\..\Datafiles\CosmicLabData\Gen3LifetimeRun22.txt','..\..\Datafiles\CosmicLabData\Gen3LifetimeRun21.txt','..\..\Datafiles\CosmicLabData\Gen3LifetimeRun20.txt']
-filenames=['..\..\Datafiles\CosmicLabData\Gen3LifetimeRun22.txt']
+filenames=['..\..\Datafiles\CosmicLabData\Gen3LifetimeRun22.txt','..\..\Datafiles\CosmicLabData\Gen3LifetimeRun21.txt','..\..\Datafiles\CosmicLabData\Gen3LifetimeRun20.txt']
+#filenames=['..\..\Datafiles\CosmicLabData\Gen3LifetimeRun22.txt']
 
 times=None
 
@@ -151,6 +151,81 @@ add_text_to_ax(0.4, 0.85, text, ax, fontsize=10)
 plt.title("Muon Lifetime",fontsize=15)
 
 plt.savefig('Lifetime.png', dpi=600)
+"""
+With two exponentials:
+"""
+
+Minuit.print_level = 1    # Print result of fits (generally - can also be moved down to each fit instance)
+
+def fitFunc(x,x0,tau_plus,tau_minus,N_plus,N_minus):
+    
+    f=binwidth*(N-N_plus-N_minus)/(binvalues[-1]-binvalues[0])+binwidth*(N_plus)*np.exp(-(x-x0)/tau_plus)/tau_plus+binwidth*(N_minus)*np.exp(-(x-x0)/tau_minus)/tau_minus
+    
+    return f#np.where(x>x0,f,0)
+
+x0_guess=tmin
+tau_plus_guess=2200
+N_plus_guess=3600
+
+tau_minus_guess=2000
+N_minus_guess=3600
+
+# Defining Chi2 calculation:
+def chi2(tau_plus,tau_minus,N_plus,N_minus):
+    condition=counts>0
+    y_fit = fitFunc(binvalues[condition], x0_guess,tau_plus,tau_minus,N_plus,N_minus)
+    chi2 = np.sum(((counts[condition] - y_fit) / np.sqrt(counts[condition]))**2)
+    return chi2
+
+
+
+minuit_chi2 = Minuit(chi2,tau_plus=tau_plus_guess,tau_minus=tau_minus_guess,N_plus=N_plus_guess,N_minus=N_minus_guess)
+minuit_chi2.errordef = 1.0     # This is the definition for ChiSqaure fits
+minuit_chi2.migrad()           # This is where the minimisation is carried out! Put ";" at the end to void output
+
+chi2_value = minuit_chi2.fval            # The value minimised, i.e. Chi2 or -2*LogLikeliHood (LLH) value
+
+# Get number of degrees-of-freedom (Ndof):
+N_NotEmptyBin = np.sum(counts > 0)
+Ndof_value = N_NotEmptyBin - minuit_chi2.nfit
+
+Prob_value = stats.chi2.sf(chi2_value, Ndof_value) # The chi2 probability given N_DOF degrees of freedom
+print(f"Chi2 value: {chi2_value:.1f}   Ndof = {Ndof_value:.0f}    Prob(Chi2,Ndof) = {Prob_value:5.8f}")
+
+#print(f"Lifetime from fit: {minuit_chi2.values['tau']:.0f} +- {minuit_chi2.errors['tau']:.0f}ns")
+
+x=np.linspace(tmin,tmax,1000)
+fig,ax=plt.subplots()
+plt.errorbar(binvalues,counts,yerr=np.sqrt(counts),fmt='.',label="data")
+#plt.plot(x,fitFunc(x,x0=x0_guess,tau=tau_guess,N_B=N_B_guess),label="Guess")
+plt.plot(x,fitFunc(x,x0_guess,*minuit_chi2.values),label="fit")
+
+plt.xlabel("start-stop (ns)")
+plt.ylabel("count")
+
+#plt.legend()
+plt.ylim(0,np.max(counts)*1.3)
+
+#print(minuit_chi2.values)
+#print(N-minuit_chi2.values['N_B'])
+#print("Purity: "+str((N-minuit_chi2.values['N_B'])/N))
+
+from ExternalFunctions import nice_string_output, add_text_to_ax    # Useful functions to print fit results on figure
+
+d = {'Chisquare: ' : minuit_chi2.fval,
+     'p-value: '   : Prob_value,
+     'N'           : N
+    }
+
+for name in minuit_chi2.parameters:
+    d[name] = [minuit_chi2.values[name], minuit_chi2.errors[name]]
+
+text = nice_string_output(d, extra_spacing=2, decimals=3)
+add_text_to_ax(0.4, 0.85, text, ax, fontsize=10)
+
+plt.title("Muon Lifetime",fontsize=15)
+
+
 
 
 """
@@ -174,7 +249,7 @@ Experiment:
 times_ordered=np.sort(times)
 Nbins=365
 dt=62.5
-minN=25#10#32#0
+minN=0#25#10#32#0
 WIDTH=1
 
 
@@ -271,6 +346,7 @@ plotcondition=np.where(np.arange(len(t_axis))%plotConst==0,True,False)
 
 
 plt.errorbar(t_axis[plotcondition],N_t[plotcondition]-minuit_chi2.values['a']*(t_axis[plotcondition]-x0_guess)-(N-minuit_chi2.values['N_muon']),fmt='.',yerr=np.sqrt(N_t[plotcondition]))
+y=minuit_chi2.values['N_muon']*np.exp(-(x-x0_guess)/minuit_chi2.values['tau'])
 plt.plot(x,minuit_chi2.values['N_muon']*np.exp(-(x-x0_guess)/minuit_chi2.values['tau']))
 
 plt.title("Muon Lifetime no background",fontsize=15)
@@ -294,6 +370,119 @@ add_text_to_ax(0.4, 0.85, text, ax, fontsize=10)
 
 
 plt.savefig('LifetimeNewNoBackground.png', dpi=600)
+
+
+"""
+Try with two exponentials:
+"""
+
+fig,ax=plt.subplots()
+ax.errorbar(t_axis[plotcondition],N_t[plotcondition],fmt='.',yerr=np.sqrt(N_t[plotcondition]))
+
+
+def fitFunc(x,a,tau_plus,tau_minus,N_muon_plus,N_muon_minus,x0):
+    #linear plus exponential
+    return (x-x0)*a+(N-N_muon_minus-N_muon_plus) + N_muon_plus*np.exp(-(x-x0)/tau_plus) + N_muon_minus*np.exp(-(x-x0)/tau_minus)
+
+def fitFuncNoBackground(x,tau_plus,tau_minus,N_muon_plus,N_muon_minus,x0):
+    #linear plus exponential
+    return N_muon_plus*np.exp(-(x-x0)/tau_plus) + N_muon_minus*np.exp(-(x-x0)/tau_minus)
+
+
+a_guess=-0.86
+tau_plus_guess=1900
+tau_minus_guess=2000
+N_muon_plus_guess=1000
+N_muon_minus_guess=1000
+
+x0_guess=t_axis[0]
+
+# Defining Chi2 calculation:
+def chi2(a,tau_plus,tau_minus,N_muon_plus,N_muon_minus):
+    condition=N_t>0
+    y_fit = fitFunc(t_axis[condition], a,tau_plus,tau_minus,N_muon_plus,N_muon_minus,x0_guess)
+    chi2 = np.sum(((N_t[condition] - y_fit) / np.sqrt(N_t[condition]))**2)
+    return chi2
+
+minuit_chi2 = Minuit(chi2, a=a_guess,tau_plus=tau_plus_guess,tau_minus=tau_minus_guess,N_muon_plus=N_muon_plus_guess,N_muon_minus=N_muon_minus_guess)
+minuit_chi2.errordef = 1.0     # This is the definition for ChiSqaure fits
+minuit_chi2.migrad()           # This is where the minimisation is carried out! Put ";" at the end to void output
+
+chi2_value = minuit_chi2.fval            # The value minimised, i.e. Chi2 or -2*LogLikeliHood (LLH) value
+
+# Get number of degrees-of-freedom (Ndof):
+N_NotEmptyBin = np.sum(counts > 0)
+Ndof_value = N_NotEmptyBin - minuit_chi2.nfit
+
+Prob_value = stats.chi2.sf(chi2_value, Ndof_value) # The chi2 probability given N_DOF degrees of freedom
+print(f"Chi2 value: {chi2_value:.1f}   Ndof = {Ndof_value:.0f}    Prob(Chi2,Ndof) = {Prob_value:5.8f}")
+
+#print(f"Lifetime from fit: {minuit_chi2.values['tau']:.0f} +- {minuit_chi2.errors['tau']:.0f}ns")
+
+x=np.linspace(t_axis[0],t_axis[-1],1000)
+#ax.plot(x,fitFunc(x,a=a_guess,tau=tau_guess,N_muon=N_muon_guess,x0=x0_guess),label="Guess")
+ax.plot(x,fitFunc(x,*minuit_chi2.values,x0_guess),label="fit")
+#ax.plot(x,minuit_chi2.values['a']*(x-x0_guess)+(N-minuit_chi2.values['N_muon']),color='grey',linestyle='--',label="Background")
+
+
+plt.xlabel("time (ns)")
+plt.ylabel("count left")
+
+print(minuit_chi2.values)
+
+#print("Purity: "+str((minuit_chi2.values['N_muon'])/N))
+
+
+from ExternalFunctions import nice_string_output, add_text_to_ax    # Useful functions to print fit results on figure
+
+d = {'Chisquare: ' : minuit_chi2.fval,
+     'p-value: '   : Prob_value,
+     'N'           : N,
+     't0'          : x0_guess
+    }
+
+
+for name in minuit_chi2.parameters:
+    d[name] = [minuit_chi2.values[name], minuit_chi2.errors[name]]
+
+text = nice_string_output(d, extra_spacing=2, decimals=3)
+add_text_to_ax(0.4, 0.85, text, ax, fontsize=10)
+
+plt.title("Muon Lifetime",fontsize=15)
+
+
+
+fig,ax=plt.subplots()
+
+plotConst=5 #filter out some points for plotting
+
+plotcondition=np.where(np.arange(len(t_axis))%plotConst==0,True,False)
+
+
+plt.errorbar(t_axis[plotcondition],N_t[plotcondition]-minuit_chi2.values['a']*(t_axis[plotcondition]-x0_guess)-(N-minuit_chi2.values['N_muon_plus']-minuit_chi2.values['N_muon_minus']),fmt='.',yerr=np.sqrt(N_t[plotcondition]))
+plt.plot(x,fitFuncNoBackground(x,minuit_chi2.values['tau_plus'],minuit_chi2.values['tau_minus'],minuit_chi2.values['N_muon_plus'],minuit_chi2.values['N_muon_minus'],x0_guess))
+#plt.plot(x,y)#Old fit
+plt.title("Muon Lifetime no background",fontsize=15)
+
+
+plt.xlabel("time (ns)")
+plt.ylabel("count left minus background")
+
+
+d = {'Chisquare: ' : minuit_chi2.fval,
+     'p-value: '   : Prob_value,
+     'N'           : N,
+     't0'          : x0_guess
+    }
+
+for name in minuit_chi2.parameters:
+    d[name] = [minuit_chi2.values[name], minuit_chi2.errors[name]]
+
+text = nice_string_output(d, extra_spacing=2, decimals=3)
+add_text_to_ax(0.4, 0.85, text, ax, fontsize=10)
+
+
+
 
 """
 Rate stuff:

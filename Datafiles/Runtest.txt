@@ -1,0 +1,50 @@
+Waiting for GPS Fix
+GPS Fix obtained at;16:34:19.000:000:000:;Date:2/12/2021
+Coincidence;16:34:00.110:813:184:;
+Coincidence;16:34:22.784:290:880:;
+Coincidence;16:34:23.034:132:600:;
+Coincidence;16:34:23.128:083:528:;
+Coincidence;16:34:23.288:780:160:;
+Coincidence;16:34:23.499:912:576:;
+Coincidence;16:34:23.722:368:512:;
+Coincidence;16:34:23.790:940:864:;
+Coincidence;16:34:24.283:584:224:;
+Stopping logging session;16:34:24.426:830:016:;Date:2/12/2021
+Waiting for GPS Fix
+GPS Fix obtained at;16:36:57.000:000:000:;Date:2/12/2021
+Coincidence;16:36:59.777:406:464:;
+Coincidence;16:37:00.522:092:544:;
+Coincidence;16:36:58.338:867:808:;
+Coincidence;16:36:58.657:110:848:;
+Coincidence;16:36:58.968:391:232:;
+Coincidence;16:36:59.017:414:848:;
+Coincidence;16:36:59.342:595:712:;
+Coincidence;16:37:00.288:125:184:;
+Coincidence;16:37:00.975:857:984:;
+Stopping logging session;16:37:01.119:343:016:;Date:2/12/2021
+Waiting for GPS Fix
+GPS Fix obtained at;10:21:38.000:000:000:;Date:9/12/2021
+Coincidence;10:21:40.548:552:000:;
+Coincidence;10:21:41.357:496:320:;
+Coincidence;10:21:41.681:724:416:;
+Coincidence;10:21:42.206:992:336:;
+Coincidence;10:21:44.845:596:352:;
+Coincidence;10:21:44.962:261:120:;
+Coincidence;10:21:45.314:192:928:;
+Coincidence;10:21:45.763:491:072:;
+Coincidence;10:21:47.055:981:436:;
+Coincidence;10:21:47.390:458:400:;
+Coincidence;10:21:47.732:811:136:;
+Stopping logging session;10:21:47.753:864:192:;Date:9/12/2021
+Waiting for GPS Fix
+GPS Fix obtained at;10:45:45.000:000:000:;Date:9/12/2021
+Coincidence;10:45:46.486:227:296:;
+Coincidence;10:45:46.795:567:040:;
+Coincidence;10:45:47.736:832:704:;
+Coincidence;10:45:47.851:495:424:;
+Coincidence;10:45:50.710:147:904:;
+Coincidence;10:45:50.761:510:848:;
+Coincidence;10:45:51.955:934:272:;
+Coincidence;10:45:52.076:918:264:;
+Coincidence;10:45:54.856:890:560:;
+Stopping logging session;10:45:54.877:774:336:;Date:9/12/2021
