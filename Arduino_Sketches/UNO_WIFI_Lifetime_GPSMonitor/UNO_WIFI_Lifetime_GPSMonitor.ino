@@ -140,7 +140,7 @@ void Startup(){
       return;  // we can fail to parse a sentence in which case we should just wait for another
   }
 
-  if (((GPS.day != 0) and (Ready==false)) and (GPS.fix==true)){ //The GPS sent us a time, so get ready to start!
+  if (((GPS.day != 0) and (Ready==false)) and (GPS.fixquality_3d==3)){ //The GPS sent us a time, so get ready to start!
     nanosecond=0;
     minute=GPS.minute; //save time we got
     second=GPS.seconds;
