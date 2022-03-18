@@ -17,21 +17,7 @@ Import data:
 """
 
 plt.close('all')
-#filenames=['..\..\Datafiles\Lifetime1.txt','..\..\Datafiles\Lifetime2.txt','..\..\Datafiles\Lifetime3.txt']
-#filenames=['..\..\Datafiles\Lifetime4.txt']
-#filenames=['..\..\Datafiles\Gen3Files\Gen3LifetimeRun1.txt','..\..\Datafiles\Gen3Files\Gen3LifetimeRun2.txt','..\..\Datafiles\Gen3Files\Gen3LifetimeRun3.txt']
-#filenames=['..\..\Datafiles\Gen3Files\Gen3LifetimeRun4.txt']
-#filenames=['..\..\Datafiles\Gen3Files\Gen3LifetimeRun5.txt']
-#filenames=['..\..\Datafiles\Gen3Files\Gen3LifetimeRun6.txt','..\..\Datafiles\Gen3Files\Gen3LifetimeRun5.txt','..\..\Datafiles\Gen3Files\Gen3LifetimeRun7.txt']
-#filenames=['..\..\Datafiles\Gen3Files\Gen3LifetimeRun15.txt','..\..\Datafiles\Gen3Files\Gen3LifetimeRun14.txt','..\..\Datafiles\Gen3Files\Gen3LifetimeRun13.txt','..\..\Datafiles\Gen3Files\Gen3LifetimeRun12.txt','..\..\Datafiles\Gen3Files\Gen3LifetimeRun11.txt','..\..\Datafiles\Gen3Files\Gen3LifetimeRun10.txt','..\..\Datafiles\Gen3Files\Gen3LifetimeRun8.txt','..\..\Datafiles\Gen3Files\Gen3LifetimeRun9.txt']
-#filenames=['..\..\Datafiles\Gen3Files\Gen3LifetimeRun10.txt']
-#filenames=['..\..\Datafiles\CosmicLabData\Gen3LifetimeRun16.txt','..\..\Datafiles\Gen3Files\Gen3LifetimeRun10.txt']
-#filenames=['..\..\Datafiles\CosmicLabData\Gen3LifetimeRun17.txt']
-#filenames=['..\..\Datafiles\CosmicLabData\Gen3LifetimeRun19.txt','..\..\Datafiles\CosmicLabData\Gen3LifetimeRun18.txt','..\..\Datafiles\CosmicLabData\Gen3LifetimeRun17.txt']
-#filenames=['..\..\Datafiles\CosmicLabData\Gen3LifetimeRun22.txt','..\..\Datafiles\CosmicLabData\Gen3LifetimeRun21.txt','..\..\Datafiles\CosmicLabData\Gen3LifetimeRun20.txt']
-#filenames=['..\..\Datafiles\CosmicLabData\Gen3LifetimeRun22.txt']
-#filenames=['..\..\Datafiles\CosmicLabData\CPH-Lifetime-11-03-22.txt']
-filenames=["..\..\Datafiles\CosmicLabData\PG1.txt","..\..\Datafiles\CosmicLabData\PG2.txt","..\..\Datafiles\CosmicLabData\PG3.txt"]
+filenames=["..\..\Datafiles\CosmicLabData\PG1.txt"]
 times=None
 
 eventTimes=[]
@@ -48,34 +34,37 @@ for f in filenames:
         times=t
     else:
         times=np.concatenate((times,t))
-print(np.mean(times))
-print(np.min(times))
-print(np.max(times))
 
 eventTimes=np.array(eventTimes)
 
 eventTimes=np.sort(eventTimes)
 eventTimes=eventTimes-eventTimes[0]
 
+"""
+Plot raw data
+"""
+
+plt.figure()
+tmin=0
+tmax=25000
+bins=int(((tmax-tmin)/62.5))
+_=plt.hist(times,bins=bins,range=(tmin,tmax),label="Data")
 
 """
 Plot part of the data
 """
 
-tmin=3500#1700#0#1800
+tmin=3500
 tmax=25000
-#tmin=500
-#tmax=2000
 Nbins=int(((tmax-tmin)/62.5)/2)
 
+plt.figure()
 counts,binedges,_=plt.hist(times,bins=Nbins,range=(tmin,tmax),label="Data")
 
 N=np.sum(counts)
 
 binvalues=(binedges[1::]+binedges[0:-1])/2
 binwidth=binvalues[1]-binvalues[0]
-#print(binvalues)
-print(N)
 """
 Fit:
 """
@@ -97,10 +86,6 @@ def chi2(x0,tau,N_B):
     return chi2
 
 
-#x0_guess=1400
-#tau_guess=2200
-#N_B_guess=17000
-
 x0_guess=-0.1
 tau_guess=2200
 N_B_guess=3600
@@ -117,10 +102,6 @@ N_NotEmptyBin = np.sum(counts > 0)
 Ndof_value = N_NotEmptyBin - minuit_chi2.nfit
 
 Prob_value = stats.chi2.sf(chi2_value, Ndof_value) # The chi2 probability given N_DOF degrees of freedom
-print(f"Chi2 value: {chi2_value:.1f}   Ndof = {Ndof_value:.0f}    Prob(Chi2,Ndof) = {Prob_value:5.8f}")
-
-print(f"Lifetime from fit: {minuit_chi2.values['tau']:.0f} +- {minuit_chi2.errors['tau']:.0f}ns")
-
 x=np.linspace(tmin,tmax,1000)
 fig,ax=plt.subplots()
 plt.errorbar(binvalues,counts,yerr=np.sqrt(counts),fmt='.',label="data")
@@ -132,10 +113,6 @@ plt.ylabel("count")
 
 #plt.legend()
 plt.ylim(0,np.max(counts)*1.3)
-
-print(minuit_chi2.values)
-print(N-minuit_chi2.values['N_B'])
-print("Purity: "+str((N-minuit_chi2.values['N_B'])/N))
 
 from ExternalFunctions import nice_string_output, add_text_to_ax    # Useful functions to print fit results on figure
 
@@ -192,9 +169,6 @@ N_NotEmptyBin = np.sum(counts > 0)
 Ndof_value = N_NotEmptyBin - minuit_chi2.nfit
 
 Prob_value = stats.chi2.sf(chi2_value, Ndof_value) # The chi2 probability given N_DOF degrees of freedom
-print(f"Chi2 value: {chi2_value:.1f}   Ndof = {Ndof_value:.0f}    Prob(Chi2,Ndof) = {Prob_value:5.8f}")
-
-#print(f"Lifetime from fit: {minuit_chi2.values['tau']:.0f} +- {minuit_chi2.errors['tau']:.0f}ns")
 
 x=np.linspace(tmin,tmax,1000)
 fig,ax=plt.subplots()
@@ -207,10 +181,6 @@ plt.ylabel("count")
 
 #plt.legend()
 plt.ylim(0,np.max(counts)*1.3)
-
-#print(minuit_chi2.values)
-#print(N-minuit_chi2.values['N_B'])
-#print("Purity: "+str((N-minuit_chi2.values['N_B'])/N))
 
 from ExternalFunctions import nice_string_output, add_text_to_ax    # Useful functions to print fit results on figure
 
@@ -225,34 +195,16 @@ for name in minuit_chi2.parameters:
 text = nice_string_output(d, extra_spacing=2, decimals=3)
 add_text_to_ax(0.4, 0.85, text, ax, fontsize=10)
 
-plt.title("Muon Lifetime",fontsize=15)
-
-
-
+plt.title("Muon Lifetime (two exponentials)",fontsize=15)
 
 """
-Plot raw data
-"""
-
-plt.figure()
-tmin=0
-tmax=25000
-bins=int(((tmax-tmin)/62.5))
-_=plt.hist(times,bins=bins,range=(tmin,tmax),label="Data")
-
-plt.figure()
-_=plt.hist(times,bins=1000,range=(5000,6000))
-
-
-"""
-Experiment:
-(better version actually)
+Doing it with the remaining population instead:
 """
 times_ordered=np.sort(times)
-Nbins=300#365
-dt=62.5
-minN=80#0#25#10#32#0
-WIDTH=1
+Nbins=300 #number of bins
+dt=62.5 #width of bins
+minN=80 #where to start in number of bins (cutoff artefacts)
+WIDTH=1 #do we merge bins?
 
 
 t_axis=(np.arange(0,Nbins,WIDTH)+minN)*dt
@@ -277,10 +229,6 @@ tau_guess=2200
 N_muon_guess=500
 x0_guess=t_axis[0]
 
-#a_guess=-0.1
-#tau_guess=2200
-#N_muon_guess=5000
-
 
 # Defining Chi2 calculation:
 def chi2(a,tau,N_muon):
@@ -300,9 +248,6 @@ N_NotEmptyBin = np.sum(counts > 0)
 Ndof_value = N_NotEmptyBin - minuit_chi2.nfit
 
 Prob_value = stats.chi2.sf(chi2_value, Ndof_value) # The chi2 probability given N_DOF degrees of freedom
-print(f"Chi2 value: {chi2_value:.1f}   Ndof = {Ndof_value:.0f}    Prob(Chi2,Ndof) = {Prob_value:5.8f}")
-
-print(f"Lifetime from fit: {minuit_chi2.values['tau']:.0f} +- {minuit_chi2.errors['tau']:.0f}ns")
 
 x=np.linspace(t_axis[0],t_axis[-1],1000)
 #ax.plot(x,fitFunc(x,a=a_guess,tau=tau_guess,N_muon=N_muon_guess,x0=x0_guess),label="Guess")
@@ -312,10 +257,6 @@ ax.plot(x,minuit_chi2.values['a']*(x-x0_guess)+(N-minuit_chi2.values['N_muon']),
 
 plt.xlabel("time (ns)")
 plt.ylabel("count left")
-
-print(minuit_chi2.values)
-
-print("Purity: "+str((minuit_chi2.values['N_muon'])/N))
 
 
 from ExternalFunctions import nice_string_output, add_text_to_ax    # Useful functions to print fit results on figure
@@ -334,7 +275,6 @@ text = nice_string_output(d, extra_spacing=2, decimals=3)
 add_text_to_ax(0.4, 0.85, text, ax, fontsize=10)
 
 plt.title("Muon Lifetime",fontsize=15)
-
 
 plt.savefig('LifetimeNew.png', dpi=600)
 
@@ -391,7 +331,7 @@ def fitFuncNoBackground(x,tau_plus,tau_minus,N_muon_plus,N_muon_minus,x0):
     return N_muon_plus*np.exp(-(x-x0)/tau_plus) + N_muon_minus*np.exp(-(x-x0)/tau_minus)
 
 
-a_guess=-0.86
+a_guess=-0.2
 tau_plus_guess=1900
 tau_minus_guess=2000
 N_muon_plus_guess=1000
@@ -417,23 +357,15 @@ N_NotEmptyBin = np.sum(counts > 0)
 Ndof_value = N_NotEmptyBin - minuit_chi2.nfit
 
 Prob_value = stats.chi2.sf(chi2_value, Ndof_value) # The chi2 probability given N_DOF degrees of freedom
-print(f"Chi2 value: {chi2_value:.1f}   Ndof = {Ndof_value:.0f}    Prob(Chi2,Ndof) = {Prob_value:5.8f}")
-
-#print(f"Lifetime from fit: {minuit_chi2.values['tau']:.0f} +- {minuit_chi2.errors['tau']:.0f}ns")
 
 x=np.linspace(t_axis[0],t_axis[-1],1000)
-#ax.plot(x,fitFunc(x,a=a_guess,tau=tau_guess,N_muon=N_muon_guess,x0=x0_guess),label="Guess")
+#ax.plot(x,fitFunc(x,a=a_guess,tau_plus=tau_plus_guess,tau_minus=tau_minus_guess,N_muon_plus=N_muon_plus_guess,N_muon_minus=N_muon_minus_guess,x0=x0_guess),label="Guess")
 ax.plot(x,fitFunc(x,*minuit_chi2.values,x0_guess),label="fit")
 #ax.plot(x,minuit_chi2.values['a']*(x-x0_guess)+(N-minuit_chi2.values['N_muon']),color='grey',linestyle='--',label="Background")
 
 
 plt.xlabel("time (ns)")
 plt.ylabel("count left")
-
-print(minuit_chi2.values)
-
-#print("Purity: "+str((minuit_chi2.values['N_muon'])/N))
-
 
 from ExternalFunctions import nice_string_output, add_text_to_ax    # Useful functions to print fit results on figure
 
@@ -450,7 +382,7 @@ for name in minuit_chi2.parameters:
 text = nice_string_output(d, extra_spacing=2, decimals=3)
 add_text_to_ax(0.4, 0.85, text, ax, fontsize=10)
 
-plt.title("Muon Lifetime",fontsize=15)
+plt.title("Muon Lifetime (two exponentials)",fontsize=15)
 
 
 
@@ -464,7 +396,7 @@ plotcondition=np.where(np.arange(len(t_axis))%plotConst==0,True,False)
 plt.errorbar(t_axis[plotcondition],N_t[plotcondition]-minuit_chi2.values['a']*(t_axis[plotcondition]-x0_guess)-(N-minuit_chi2.values['N_muon_plus']-minuit_chi2.values['N_muon_minus']),fmt='.',yerr=np.sqrt(N_t[plotcondition]))
 plt.plot(x,fitFuncNoBackground(x,minuit_chi2.values['tau_plus'],minuit_chi2.values['tau_minus'],minuit_chi2.values['N_muon_plus'],minuit_chi2.values['N_muon_minus'],x0_guess))
 #plt.plot(x,y)#Old fit
-plt.title("Muon Lifetime no background",fontsize=15)
+plt.title("Muon Lifetime (two exponentials) no background",fontsize=15)
 
 
 plt.xlabel("time (ns)")
@@ -496,7 +428,7 @@ from ExternalFunctions import nice_string_output, add_text_to_ax    # Useful fun
 
 #For the histogram:
 emin=0-0.5
-emax=30+0.5
+emax=60+0.5
 Nbins=int(emax-emin)
 timeBin=60 #in seconds
 
@@ -547,7 +479,6 @@ N_NotEmptyBin = np.sum(counts > 0)
 Ndof_value = N_NotEmptyBin - minuit_chi2.nfit
 
 Prob_value = stats.chi2.sf(chi2_value, Ndof_value) # The chi2 probability given N_DOF degrees of freedom
-print(f"Chi2 value: {chi2_value:.1f}   Ndof = {Ndof_value:.0f}    Prob(Chi2,Ndof) = {Prob_value:5.8f}")
 
 x=np.linspace(emin,emax,1000)
 x_round=np.round(x)

@@ -19,7 +19,10 @@ Import data:
 
 plt.close('all')
 #filenames=['..\FakeDatafiles\Coicidence3Run4.txt','..\FakeDatafiles\Coicidence3Run3.txt','..\FakeDatafiles\Coicidence2Run2.txt']
-filenames=['..\..\Datafiles\GPSTest\Regular2.txt','..\..\Datafiles\GPSTest\Wifi2.txt']
+#filenames=['..\..\Datafiles\GPSTest\Regular2.txt','..\..\Datafiles\GPSTest\Wifi2.txt']
+filenames=['..\..\Datafiles\CosmicLabData\MIL_Coincidence_10_3_22.txt','..\..\Datafiles\CosmicLabData\PRG_Coincidence_10_3_22.txt','..\..\Datafiles\CosmicLabData\CPH_Coincidence_10_3_22.txt']
+
+locations=['MIL','PRG','CPH']
 
 times=None
 

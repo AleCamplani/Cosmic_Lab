@@ -13,12 +13,24 @@ def readTime(s,unit="Hours"):
     in units chosen by the 'unit' argument
     """
     
-    hr=int(s[0:2])
-    minutes=int(s[3:5])
-    seconds=int(s[6:8])
-    milliseconds=int(s[9:12])
-    microseconds=int(s[13:16])
-    nanoseconds=int(s[17:20])
+    if len(s)==21: #Normal format
+        
+        hr=int(s[0:2])
+        minutes=int(s[3:5])
+        seconds=int(s[6:8])
+        milliseconds=int(s[9:12])
+        microseconds=int(s[13:16])
+        nanoseconds=int(s[17:20])
+    
+    else: #We might have three digits of hr:
+        hr=int(s[0:3])
+        minutes=int(s[4:6])
+        seconds=int(s[7:9])
+        milliseconds=int(s[10:13])
+        microseconds=int(s[14:17])
+        nanoseconds=int(s[18:21])
+    
+    
     time=0 #Variable we return
     
     conversion=np.array([0,0,0,0,0,0],dtype=float)
@@ -50,6 +62,21 @@ def readTime(s,unit="Hours"):
     
     return time
 
+
+def Coinc(Array1,Array2,Interval):
+    
+    result=[]
+    jmin=0
+    for i in range(len(Array1)):
+        for j in range (jmin,len(Array2)):
+            if np.abs(Array1[i]-Array2[j])<Interval:
+                result.append([i,j])
+            if Array2[j]-Array1[i]>Interval:
+                break
+            if Array1[i]-Array2[j]>Interval:
+                jmin=j
+    return result
+    
 
 def findRate(Data,StartTime):
       
