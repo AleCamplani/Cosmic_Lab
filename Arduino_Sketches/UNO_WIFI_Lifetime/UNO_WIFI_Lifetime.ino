@@ -62,7 +62,7 @@ unsigned long minTimeDiff=0; //in ns
 
 void setup() {
   
-  Serial.begin(19200);
+  Serial.begin(38400);
   GPS.begin(9600);//Start connection to GPS
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY); //Tell GPS we only need basic data
   GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);   // 1 Hz update rate

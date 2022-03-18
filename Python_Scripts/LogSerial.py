@@ -50,6 +50,13 @@ for i in range(RunEvents):
     if veryVerbose:
         print(x) #print in termial, so we can look at it live
         
+    if i%10==0: #save once in a while
+        File.close()
+        File = open(Filelocation,"a") #append only
+
+
+        
+        
 port.write("s".encode("utf-8")); #Tell it stop logging
 x=port.readline()[0:-2].decode("utf-8")#Get response
 
